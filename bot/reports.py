@@ -69,7 +69,7 @@ def get_daily_report(date_str: str = None, days: int = 1):
 def get_plan(date_str: str = None, days: int = 1):
     """Формирует план. date_str: ДД.ММ или ДД.ММ.ГГГГ (по умолчанию завтра). days: кол-во дней."""
     now = datetime.datetime.now(TZ)
-    default = now.date() + datetime.timedelta(days=1)
+    default = now.date()
     start = _parse_date(date_str, default)
     if isinstance(start, str):
         return start
