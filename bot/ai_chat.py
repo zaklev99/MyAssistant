@@ -36,9 +36,11 @@ def get_system_instruction():
         "'отчет' → get_daily_report(). "
         "'отчет ДД.ММ' → get_daily_report(date_str='ДД.ММ'). "
         "'отчет за 7 дней' / 'отчет за неделю' → get_daily_report(days=7) (последние 7 дней). "
+        "'отчет за N часов' → get_daily_report(hours=N) (последние N часов). "
         "'план на завтра' → get_plan(). "
         "'план на ДД.ММ' → get_plan(date_str='ДД.ММ'). "
         "'план на неделю' → get_plan(days=7). "
+        "'план на N часов' → get_plan(hours=N) (ближайшие N часов). "
         "НЕ ГОВОРИ, ЧТО НЕ МОЖЕШЬ — вызывай функции."
     )
 
