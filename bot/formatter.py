@@ -65,6 +65,7 @@ def build_day_data(target_date: datetime.date, events: list, tasks: list) -> Day
     """
     iso = target_date.strftime('%Y-%m-%d')
     day = DayData(target_date)
+    now = datetime.datetime.now(TZ)
 
     # --- Обработка событий календаря ---
     for e in events:
@@ -84,7 +85,23 @@ def build_day_data(target_date: datetime.date, events: list, tasks: list) -> Day
                 dt_end = datetime.datetime.fromisoformat(end['dateTime']).astimezone(TZ)
                 
             if dt.date() == target_date:
-                day.pending.append(DayItem(summary, time=dt.time(), end_time=dt_end.time() if dt_end else None))
+                # Определяем, прошло ли событие
+                event_ended = False
+                if target_date < now.date():
+                    # Прошедший день — все события завершены
+                    event_ended = True
+                elif target_date == now.date():
+                    # Сегодня — проверяем end_time (или start + 30 мин)
+                    end_check = dt_end if dt_end else (dt + datetime.timedelta(minutes=30))
+                    event_ended = end_check <= now
+
+                item = DayItem(summary, time=dt.time(),
+                               end_time=dt_end.time() if dt_end else None,
+                               is_completed=event_ended)
+                if event_ended:
+                    day.completed.append(item)
+                else:
+                    day.pending.append(item)
 
     # --- Обработка задач ---
     for t in tasks:

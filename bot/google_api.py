@@ -64,6 +64,10 @@ def get_events_for_range(start_date, end_date):
 
     all_events = []
     for cal_entry in cal_service.calendarList().list().execute().get('items', []):
+        cal_id = cal_entry['id']
+        # Исключаем праздничные календари Google
+        if '#holiday@' in cal_id:
+            continue
         try:
             ev = cal_service.events().list(
                 calendarId=cal_entry['id'], timeMin=t_start, timeMax=t_end,

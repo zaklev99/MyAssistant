@@ -16,8 +16,9 @@ logging.basicConfig(
 log = logging.getLogger('bot')
 
 # --- КОНФИГУРАЦИЯ ---
-MODEL_ID = "gemini-3.1-flash-lite-preview"
-TZ = pytz.timezone('Europe/Moscow')
+MODEL_ID = "gemini-2.5-flash"
+FALLBACK_MODEL_ID = "gemini-2.0-flash"
+TZ = pytz.timezone('Europe/Samara')  # UTC+4
 SCOPES = [
     'https://www.googleapis.com/auth/calendar',
     'https://www.googleapis.com/auth/tasks'

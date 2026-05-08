@@ -31,11 +31,16 @@ def _parse_date(date_str: str | None, default: datetime.date) -> datetime.date |
 def get_daily_report(date_str: str = None, days: int = 1):
     """Формирует отчет. date_str: ДД.ММ или ДД.ММ.ГГГГ. days: кол-во дней (макс 30)."""
     now = datetime.datetime.now(TZ)
-    start = _parse_date(date_str, now.date())
+    days = max(1, min(days, 30))
+    # Без явной даты: отчёт за N дней = последние N дней включая сегодня
+    if not date_str and days > 1:
+        default_start = now.date() - datetime.timedelta(days=days - 1)
+    else:
+        default_start = now.date()
+    start = _parse_date(date_str, default_start)
     if isinstance(start, str):
         return start  # Ошибка парсинга
 
-    days = max(1, min(days, 30))
     end = start + datetime.timedelta(days=days - 1)
     next_day_date = end + datetime.timedelta(days=1)
 
