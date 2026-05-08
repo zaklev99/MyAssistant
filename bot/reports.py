@@ -102,4 +102,15 @@ def get_plan(date_str: str = None, days: int = 1):
         for i in range(days):
             d = start + datetime.timedelta(days=i)
             day_list.append(build_day_data(d, events, tasks))
+        # Добавляем бессрочные и просроченные задачи в первый день
+        if day_list:
+            first_day = day_list[0]
+            target_iso = first_day.date.isoformat()
+            for t in tasks:
+                if t.get('status') == 'completed':
+                    continue
+                due = t.get('due')
+                if not due or due[:10] < target_iso[:10]:
+                    first_day.pending.append(DayItem(t['title']))
+            first_day.sort()
         return format_multi_day_plan(day_list)
